@@ -1,0 +1,4 @@
+{
+  "mongoURI": "your_mongodb_connection_string_here",
+  "baseUrl": "http://localhost:5000"
+}

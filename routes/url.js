@@ -5,10 +5,11 @@ const shortid = require('shortid');
 const config = require('config');
 
 const Url = require('../models/Url');
+const tokenBucket = require('../middleware/tokenBucket');
 
 // @route     POST /api/url/shorten
 // @desc      Create short URL
-router.post('/shorten', async (req, res) => {
+router.post('/shorten', tokenBucket, async (req, res) => {
   const { longUrl } = req.body;
   const baseUrl = config.get('baseUrl');
 

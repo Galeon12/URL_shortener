@@ -1,1 +1,5 @@
 node_modules/
+config/default.json
+config/local*.json
+.env
+check_db.js
