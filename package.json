@@ -1,23 +1,11 @@
 {
-  "name": "url_shortner_service",
+  "name": "url-shortener-suite",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "config": "^3.1.0",
-    "express": "^4.17.1",
-    "mongoose": "^5.7.5",
-    "shortid": "^2.2.14",
-    "valid-url": "^1.0.9"
-  },
-  "devDependencies": {
-    "nodemon": "^1.19.1"
+    "start": "cd url_shortener_service && npm start",
+    "frontend": "cd frontend && npm run dev",
+    "backend": "cd url_shortener_service && npm start",
+    "tunnel": "node scripts/tunnel.mjs"
   }
 }
