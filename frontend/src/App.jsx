@@ -4,6 +4,7 @@ import { HeroShortenForm } from '@/components/HeroShortenForm';
 import { UrlList } from '@/components/UrlList';
 import { RateLimitCard } from '@/components/RateLimitCard';
 import { QrCodeModal } from '@/components/QrCodeModal';
+import { AnalyticsModal } from '@/components/AnalyticsModal';
 import { api } from '@/services/api';
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
   const [loadingUrls, setLoadingUrls] = useState(true);
   const [urlsError, setUrlsError] = useState(null);
   const [selectedQrUrl, setSelectedQrUrl] = useState(null);
+  const [selectedAnalyticsUrl, setSelectedAnalyticsUrl] = useState(null);
 
   // Sync theme with HTML class
   useEffect(() => {
@@ -141,6 +143,7 @@ export default function App() {
               onRefresh={fetchUrls}
               onDeleteUrl={handleDeleteUrl}
               onOpenQr={setSelectedQrUrl}
+              onOpenAnalytics={setSelectedAnalyticsUrl}
             />
           </div>
 
@@ -150,16 +153,30 @@ export default function App() {
 
             <div className="rounded-lg border border-border bg-card p-4 text-xs text-muted-foreground space-y-2">
               <h4 className="font-semibold text-foreground text-xs uppercase tracking-wider">
-                System Architecture
+                Distributed Architecture
               </h4>
               <p className="leading-relaxed">
-                Protected by in-memory token bucket rate limiting. MongoDB database with resilient fallback file persistence.
+                Atomic token-bucket rate limiting, Redis cache-aside (24h TTL), and asynchronous post-redirect telemetry tracking.
               </p>
-              <div className="pt-2 border-t border-border flex items-center justify-between text-[11px]">
-                <span>Status</span>
-                <span className="font-mono text-foreground font-medium">
-                  {health?.status === 'online' ? 'Operational' : 'Connecting'}
-                </span>
+              <div className="pt-2 border-t border-border space-y-1.5 text-[11px]">
+                <div className="flex items-center justify-between">
+                  <span>API Status</span>
+                  <span className="font-mono text-foreground font-medium">
+                    {health?.status === 'online' ? 'Operational' : 'Connecting'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Database</span>
+                  <span className="font-mono text-foreground font-medium">
+                    {health?.database || 'Active'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Redis Cache</span>
+                  <span className="font-mono text-foreground font-medium">
+                    {health?.redis || 'Fallback Mode'}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -171,9 +188,9 @@ export default function App() {
         <div className="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>Shorten Service &copy; {new Date().getFullYear()}</span>
           <div className="flex items-center gap-4 text-[11px]">
-            <span>Privacy-first</span>
+            <span>Distributed Cache</span>
             <span>&bull;</span>
-            <span>Zero trackers</span>
+            <span>Async Analytics</span>
             <span>&bull;</span>
             <span>Linear Aesthetic</span>
           </div>
@@ -186,6 +203,15 @@ export default function App() {
         open={Boolean(selectedQrUrl)}
         onOpenChange={(open) => {
           if (!open) setSelectedQrUrl(null);
+        }}
+      />
+
+      {/* Analytics Modal */}
+      <AnalyticsModal
+        urlItem={selectedAnalyticsUrl}
+        open={Boolean(selectedAnalyticsUrl)}
+        onOpenChange={(open) => {
+          if (!open) setSelectedAnalyticsUrl(null);
         }}
       />
     </div>

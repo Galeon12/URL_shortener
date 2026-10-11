@@ -11,6 +11,7 @@ import {
   SlidersHorizontal,
   AlertCircle,
   X,
+  Clock,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +21,7 @@ import { Badge } from '@/components/ui/badge';
 export function HeroShortenForm({ onShortenSuccess, onOpenQr, baseUrl }) {
   const [longUrl, setLongUrl] = useState('');
   const [customCode, setCustomCode] = useState('');
+  const [expiresIn, setExpiresIn] = useState('');
   const [showCustom, setShowCustom] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -45,6 +47,7 @@ export function HeroShortenForm({ onShortenSuccess, onOpenQr, baseUrl }) {
         body: JSON.stringify({
           longUrl: targetUrl,
           customCode: showCustom && customCode.trim() ? customCode.trim() : undefined,
+          expiresIn: expiresIn ? parseInt(expiresIn, 10) : undefined,
         }),
       });
 
@@ -57,6 +60,7 @@ export function HeroShortenForm({ onShortenSuccess, onOpenQr, baseUrl }) {
       setCreatedUrl(data);
       setLongUrl('');
       setCustomCode('');
+      setExpiresIn('');
       setShowCustom(false);
       onShortenSuccess?.(data);
     } catch (err) {
@@ -116,8 +120,8 @@ export function HeroShortenForm({ onShortenSuccess, onOpenQr, baseUrl }) {
             </Button>
           </div>
 
-          {/* Secondary Controls (Custom Alias Toggle) */}
-          <div className="flex items-center justify-between text-xs pt-1">
+          {/* Secondary Controls (Custom Alias Toggle & Expiration) */}
+          <div className="flex items-center justify-between text-xs pt-1 flex-wrap gap-2">
             <button
               type="button"
               onClick={() => setShowCustom(!showCustom)}
@@ -127,9 +131,30 @@ export function HeroShortenForm({ onShortenSuccess, onOpenQr, baseUrl }) {
               {showCustom ? 'Hide custom alias' : 'Add custom alias (optional)'}
             </button>
 
-            <span className="text-muted-foreground hidden sm:inline">
-              Press <kbd className="rounded border border-border px-1 py-0.5 font-mono text-[10px]">Enter ↵</kbd> to submit
-            </span>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <span className="text-muted-foreground flex items-center gap-1 text-[11px]">
+                  <Clock className="h-3 w-3" />
+                  Expires:
+                </span>
+                <select
+                  value={expiresIn}
+                  onChange={(e) => setExpiresIn(e.target.value)}
+                  className="bg-background border border-border text-foreground text-xs rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer"
+                  title="Set link expiration"
+                >
+                  <option value="">Never (Permanent)</option>
+                  <option value="3600">1 Hour</option>
+                  <option value="86400">24 Hours</option>
+                  <option value="604800">7 Days</option>
+                  <option value="2592000">30 Days</option>
+                </select>
+              </div>
+
+              <span className="text-muted-foreground hidden sm:inline text-[11px]">
+                <kbd className="rounded border border-border px-1 py-0.5 font-mono text-[10px]">Enter ↵</kbd>
+              </span>
+            </div>
           </div>
 
           {/* Custom Alias Input */}

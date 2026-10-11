@@ -33,7 +33,7 @@ export const api = {
     return handleResponse(await fetch(`${API_BASE}/api/url/stats/${encodeURIComponent(code)}`));
   },
 
-  async shortenUrl({ longUrl, customCode }) {
+  async shortenUrl({ longUrl, customCode, expiresIn }) {
     return handleResponse(
       await fetch(`${API_BASE}/api/url/shorten`, {
         method: 'POST',
@@ -41,6 +41,7 @@ export const api = {
         body: JSON.stringify({
           longUrl,
           customCode: customCode?.trim() || undefined,
+          expiresIn: expiresIn ? parseInt(expiresIn, 10) : undefined,
         }),
       })
     );

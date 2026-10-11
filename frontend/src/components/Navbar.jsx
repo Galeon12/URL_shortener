@@ -19,7 +19,7 @@ export function Navbar({ health, tokens, theme, onToggleTheme, onRefreshData }) 
               Shorten
             </span>
             <span className="font-mono text-[10px] text-muted-foreground border border-border px-1.5 py-0.5 rounded">
-              v1.0
+              v2.0
             </span>
           </div>
         </div>
@@ -42,6 +42,20 @@ export function Navbar({ health, tokens, theme, onToggleTheme, onRefreshData }) 
               </span>
             )}
           </div>
+
+          {/* Redis Cache indicator */}
+          {health?.redis && (
+            <div className="hidden md:flex items-center gap-1.5 px-2 py-1 rounded-md border border-border text-xs text-muted-foreground bg-card">
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${
+                  health.redis.startsWith('connected') ? 'bg-emerald-500' : 'bg-amber-500'
+                }`}
+              />
+              <span className="font-mono text-[11px] text-foreground">
+                Redis: {health.redis.startsWith('connected') ? 'Ready' : 'Fallback'}
+              </span>
+            </div>
+          )}
 
           {/* Public domain indicator */}
           {health?.baseUrl && (

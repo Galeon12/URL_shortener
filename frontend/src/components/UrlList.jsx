@@ -11,6 +11,8 @@ import {
   Calendar,
   AlertCircle,
   RefreshCw,
+  BarChart3,
+  Clock,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -24,6 +26,7 @@ export function UrlList({
   onRefresh,
   onDeleteUrl,
   onOpenQr,
+  onOpenAnalytics,
 }) {
   const [search, setSearch] = useState('');
   const [copiedCode, setCopiedCode] = useState(null);
@@ -195,6 +198,17 @@ export function UrlList({
                     <Calendar className="h-3 w-3" />
                     {formatTimestamp(item.date)}
                   </span>
+
+                  {item.expiresAt && (
+                    <span className="text-[11px] text-muted-foreground flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {new Date(item.expiresAt) < new Date() ? (
+                        <span className="text-destructive font-medium">Expired</span>
+                      ) : (
+                        <span>Exp {formatTimestamp(item.expiresAt)}</span>
+                      )}
+                    </span>
+                  )}
                 </div>
 
                 {/* Long destination link */}
@@ -238,6 +252,17 @@ export function UrlList({
                       Copy
                     </>
                   )}
+                </Button>
+
+                {/* Analytics Modal Trigger */}
+                <Button
+                  variant="ghost"
+                  size="iconSm"
+                  onClick={() => onOpenAnalytics?.(item)}
+                  title="View Analytics & Telemetry"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <BarChart3 className="h-3.5 w-3.5" />
                 </Button>
 
                 {/* QR Code Modal Trigger */}
