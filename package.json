@@ -6,6 +6,8 @@
     "start": "cd url_shortener_service && npm start",
     "frontend": "cd frontend && npm run dev",
     "backend": "cd url_shortener_service && npm start",
+    "test": "cd url_shortener_service && npm test",
+    "benchmark": "cd url_shortener_service && npm run benchmark",
     "tunnel": "node scripts/tunnel.mjs"
   }
 }

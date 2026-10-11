@@ -47,9 +47,13 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 // ── Request timing header ─────────────────────────────────────────────────────
 app.use((req, res, next) => {
   const start = Date.now();
-  res.on('finish', () => {
-    res.setHeader('X-Response-Time', `${Date.now() - start}ms`);
-  });
+  const send = res.send;
+  res.send = function (...args) {
+    if (!res.headersSent) {
+      res.setHeader('X-Response-Time', `${Date.now() - start}ms`);
+    }
+    return send.apply(this, args);
+  };
   next();
 });
 
